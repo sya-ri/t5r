@@ -24,6 +24,7 @@ Route::get('/login', [AuthenticatedSessionController::class, 'create'])
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])
                 ->middleware('guest');
 
+/* TODO: 現状で不要な機能
 Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
                 ->middleware('guest')
                 ->name('password.request');
@@ -51,6 +52,7 @@ Route::get('/verify-email/{id}/{hash}', [VerifyEmailController::class, '__invoke
 Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
                 ->middleware(['auth', 'throttle:6,1'])
                 ->name('verification.send');
+*/
 
 Route::get('/confirm-password', [ConfirmablePasswordController::class, 'show'])
                 ->middleware('auth')
