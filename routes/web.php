@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TimelineController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,8 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/', [TimelineController::class, 'show'])
+                ->middleware(['auth'])
+                ->name('timeline');
 
 require __DIR__.'/auth.php';
