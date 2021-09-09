@@ -14,10 +14,13 @@ class EmailVerificationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_email_verification_screen_can_be_rendered()
+    protected function setUp(): void
     {
         $this->markTestSkipped('コメントアウトした機能です');
+    }
 
+    public function test_email_verification_screen_can_be_rendered()
+    {
         $user = User::factory()->create([
             'email_verified_at' => null,
         ]);
@@ -29,8 +32,6 @@ class EmailVerificationTest extends TestCase
 
     public function test_email_can_be_verified()
     {
-        $this->markTestSkipped('コメントアウトした機能です');
-
         $user = User::factory()->create([
             'email_verified_at' => null,
         ]);
@@ -52,8 +53,6 @@ class EmailVerificationTest extends TestCase
 
     public function test_email_is_not_verified_with_invalid_hash()
     {
-        $this->markTestSkipped('コメントアウトした機能です');
-
         $user = User::factory()->create([
             'email_verified_at' => null,
         ]);
