@@ -5,9 +5,21 @@
         </h2>
     </x-slot>
 
-    @foreach($messages as $message)
-        <div class="mb-2">
-            <p>{{ $message->created_at }} {{ $message->user->name }} {{ $message->content  }}</p>
-        </div>
-    @endforeach
+    <div class="md:container md:mx-auto shadow-lg py-2">
+        @foreach($messages as $message)
+            <div class="border-b border-gray-400 m-2">
+                <div class="flex justify-between text-lg border-b">
+                    <p>{{ $message->user->name }}</p>
+                    <a href="">
+                        <p>{{ rand(0, 100) }} 🖤</p>
+                    </a>
+                </div>
+                <a href="/message/{{ $message->id }}">
+                    <p class="text-sm">{{ $message->created_at->format('Y/m/d H:i:s') }}</p>
+                    <p class="text-base">{{ $message->content }}</p>
+                </a>
+            </div>
+        @endforeach
+        <p class="text-center ">↓</p>
+    </div>
 </x-app-layout>

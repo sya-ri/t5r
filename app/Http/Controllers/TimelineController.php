@@ -9,6 +9,7 @@ class TimelineController extends Controller
     public function show()
     {
         $messages = Message::all([
+            'id',
             'created_at',
             'user_id', // user
             'content',
