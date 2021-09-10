@@ -1,0 +1,36 @@
+name: Test
+on: pull_request
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    env:
+      COMPOSE_INTERACTIVE_NO_CLI=1: 1
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+      - name: Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ./vendor
+            ./node_modules
+          key: ${{ runner.os }}-${{ hashFiles('docker-compose.yml') }}
+      - name: Copy .env
+        run: |
+          cp .env.example .env
+      - name: Install package
+        run: |
+          docker run --rm \
+            -v $(pwd):/opt \
+            -w /opt \
+            laravelsail/php80-composer:latest \
+            bash -c "composer install"
+      - name: Launch
+        run: |
+          docker-compose up -d laravel.test
+      - name: Generate key
+        run: |
+          docker-compose exec laravel.test php artisan key:generate
+      - name: Test
+        run: |
+          docker-compose exec laravel.test php artisan test
