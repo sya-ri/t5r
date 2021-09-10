@@ -14,7 +14,7 @@
                         <p>{{ rand(0, 100) }} 🖤</p>
                     </a>
                 </div>
-                <a href="/message/{{ $message->id }}">
+                <a href="{{ route('message.view', $message->id) }}">
                     <p class="text-sm">{{ $message->created_at->format('Y/m/d H:i:s') }}</p>
                     <p class="text-base">{{ $message->content }}</p>
                 </a>

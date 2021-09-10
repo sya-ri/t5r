@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MessageViewController;
 use App\Http\Controllers\TimelineController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,5 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [TimelineController::class, 'show'])
                 ->middleware(['auth'])
                 ->name('timeline');
+
+Route::get('/message/{id}', [MessageViewController::class, 'show'])
+                ->middleware(['auth'])
+                ->name('message.view');
 
 require __DIR__.'/auth.php';
