@@ -10,9 +10,7 @@
             <div class="border-b border-gray-400 m-2">
                 <div class="flex justify-between text-lg border-b">
                     <p>{{ $message->user->name }}</p>
-                    <a href="">
-                        <p>{{ rand(0, 100) }} 🖤</p>
-                    </a>
+                    <livewire:like-button :message="$message" />
                 </div>
                 <a href="{{ route('message.view', $message->id) }}">
                     <p class="text-sm">{{ $message->created_at->format('Y/m/d H:i:s') }}</p>

@@ -9,9 +9,7 @@
         <div class="m-2 mb-0">
             <div class="flex justify-between text-lg border-b">
                 <p>{{ $message->user->name }}</p>
-                <a href="">
-                    <p>{{ rand(0, 100) }} 🖤</p>
-                </a>
+                <livewire:like-button :message="$message" />
             </div>
             <p class="text-sm">{{ $message->created_at->format('Y/m/d H:i:s') }}</p>
             <p class="text-base">{{ $message->content }}</p>

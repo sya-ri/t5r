@@ -15,6 +15,9 @@
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
+
+        <!-- Livewire -->
+        @livewireStyles
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
@@ -32,5 +35,8 @@
                 {{ $slot }}
             </main>
         </div>
+
+        <!-- Livewire -->
+        @livewireScripts
     </body>
 </html>
