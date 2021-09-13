@@ -11,6 +11,10 @@ class MessageViewController extends Controller
     {
         $message = Message::find($id);
 
-        return view('message-view', compact('message'));
+        if ($message) {
+            return view('message-view', compact('message'));
+        }
+
+        abort(404, 'Message Not Found');
     }
 }
