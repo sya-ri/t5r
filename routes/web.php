@@ -19,7 +19,7 @@ Route::get('/', [TimelineController::class, 'show'])
                 ->middleware(['auth'])
                 ->name('timeline');
 
-Route::get('/message/{id}', [MessageViewController::class, 'show'])
+Route::get('/message/{message}', [MessageViewController::class, 'show'])
                 ->middleware(['auth'])
                 ->name('message.view');
 

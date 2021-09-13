@@ -6,14 +6,8 @@ use App\Models\Message;
 
 class MessageViewController extends Controller
 {
-    public function show($id)
+    public function show(Message $message)
     {
-        $message = Message::find($id);
-
-        if ($message) {
-            return view('message-view', compact('message'));
-        }
-
-        abort(404, 'Message Not Found');
+        return view('message-view', compact('message'));
     }
 }
