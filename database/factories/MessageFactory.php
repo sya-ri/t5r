@@ -24,7 +24,7 @@ class MessageFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::all()->random(),
+            'user_id' => User::factory(),
             'content' => Str::random(60),
             'created_at' => $this->faker->dateTime(),
         ];
