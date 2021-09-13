@@ -3,34 +3,36 @@ on: pull_request
 jobs:
   test:
     runs-on: ubuntu-20.04
-    env:
-      COMPOSE_INTERACTIVE_NO_CLI=1: 1
     steps:
       - name: Clone repository
         uses: actions/checkout@v2
-      - name: Cache
+      - name: Cache vendor
+        id: cache
         uses: actions/cache@v2
         with:
           path: |
             ./vendor
-            ./node_modules
-          key: ${{ runner.os }}-${{ hashFiles('docker-compose.yml') }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
       - name: Copy .env
         run: |
           cp .env.example .env
-      - name: Install package
-        run: |
-          docker run --rm \
-            -v $(pwd):/opt \
-            -w /opt \
-            laravelsail/php80-composer:latest \
-            bash -c "composer install"
+      - name: Composer install
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: composer install -n --prefer-dist
       - name: Launch
         run: |
-          docker-compose up -d laravel.test
+          ./vendor/bin/sail up -d
       - name: Generate key
         run: |
-          docker-compose exec laravel.test php artisan key:generate
+          docker-compose exec -T laravel.test php artisan key:generate
+      - name: Wait for MySQL to start # https://www.pnkts.net/2020/07/27/connection-refused
+        run: |
+          docker-compose exec -T mysql bash -c "mysqladmin --wait --count 60 ping || exit 1"
+      - name: Migrate database
+        run: |
+          docker-compose exec -T laravel.test php artisan migrate --seed
       - name: Test
         run: |
-          docker-compose exec laravel.test php artisan test
+          docker-compose exec -T laravel.test php artisan test
