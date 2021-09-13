@@ -1,3 +1,3 @@
 <button wire:click="onClick">
-    <p>{{ $likes }} {{ $icon }}</p>
+    <p>{{ $likeCount }} {{ $icon }}</p>
 </button>

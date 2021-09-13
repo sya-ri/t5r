@@ -20,8 +20,25 @@ class Message extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function likes()
+    public function likeCount()
     {
-        return rand(0, 100);
+        return $this->hasMany(Like::class)->count();
+    }
+
+    public function getLike($user)
+    {
+        return $this->hasMany(Like::class)->firstWhere('user_id', $user->id);
+    }
+
+    public function canLike($user)
+    {
+        return $user->id !== $this->user_id;
+    }
+
+    public function like($user)
+    {
+        if ($this->canLike($user)) {
+            Like::create(['user_id' => $user->id, 'message_id' => $this->id]);
+        }
     }
 }
