@@ -12,7 +12,7 @@ class MessageTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get('/');
+        $response = $this->actingAs($user)->get(route('timeline'));
 
         $response->assertStatus(200);
     }
