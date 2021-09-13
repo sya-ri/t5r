@@ -25,7 +25,7 @@ class MessageFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'content' => Str::random(60),
+            'content' => $this->faker->realText(60),
             'created_at' => $this->faker->dateTime(),
         ];
     }
