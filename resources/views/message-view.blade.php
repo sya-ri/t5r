@@ -12,7 +12,7 @@
                 <livewire:like-button :message="$message" />
             </div>
             <p class="text-sm">{{ $message->created_at->format('Y/m/d H:i:s') }}</p>
-            <p class="text-base">{{ $message->content }}</p>
+            <p class="text-base break-all">{{ $message->content }}</p>
         </div>
     </div>
 </x-app-layout>
