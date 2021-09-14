@@ -38,7 +38,7 @@ class MessageTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get("message.view", [-1]); // -1 is an unexpected id (id is unsigned)
+        $response = $this->actingAs($user)->get(route("message.view", [-1])); // -1 is an unexpected id (id is unsigned)
 
         $response->assertNotFound();
     }
