@@ -11,10 +11,15 @@ class MessageTest extends TestCase
     public function test_timeline_screen_can_be_rendered()
     {
         $user = User::factory()->create();
+        $messages = Message::factory()->count(3)->create();
 
         $response = $this->actingAs($user)->get(route('timeline'));
 
         $response->assertOk();
+        foreach ($messages as $message) {
+            $response->assertSee($message->user->name);
+            $response->assertSee($message->content);
+        }
     }
 
     public function test_message_screen_can_be_rendered()
@@ -25,6 +30,8 @@ class MessageTest extends TestCase
         $response = $this->actingAs($user)->get("/message/$message->id");
 
         $response->assertOk();
+        $response->assertSee($message->user->name);
+        $response->assertSee($message->content);
     }
 
     public function test_message_is_not_found()
