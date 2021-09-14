@@ -6,20 +6,10 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v2
-      - name: Cache vendor
-        id: cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ./vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
       - name: Copy .env
         run: |
           cp .env.example .env
       - name: Composer install
-        if: steps.cache.outputs.cache-hit != 'true'
         run: composer install -n --prefer-dist
       - name: Launch
         run: |
