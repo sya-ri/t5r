@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Message;
 use App\Models\User;
-use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class MessageTest extends TestCase
@@ -15,7 +14,7 @@ class MessageTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('timeline'));
 
-        $response->assertStatus(Response::HTTP_OK);
+        $response->assertOk();
     }
 
     public function test_message_screen_can_be_rendered()
@@ -25,7 +24,7 @@ class MessageTest extends TestCase
 
         $response = $this->actingAs($user)->get("/message/$message->id");
 
-        $response->assertStatus(Response::HTTP_OK);
+        $response->assertOk();
     }
 
     public function test_message_is_not_found()
@@ -34,6 +33,6 @@ class MessageTest extends TestCase
 
         $response = $this->actingAs($user)->get("/message/-1"); // -1 is an unexpected id (id is unsigned)
 
-        $response->assertStatus(Response::HTTP_NOT_FOUND);
+        $response->assertNotFound();
     }
 }

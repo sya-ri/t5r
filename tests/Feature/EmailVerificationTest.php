@@ -8,7 +8,6 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
-use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class EmailVerificationTest extends TestCase
@@ -28,7 +27,7 @@ class EmailVerificationTest extends TestCase
 
         $response = $this->actingAs($user)->get('/verify-email');
 
-        $response->assertStatus(Response::HTTP_OK);
+        $response->assertOk();
     }
 
     public function test_email_can_be_verified()
