@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Http\Livewire\LikeButton;
 use App\Models\Message;
 use App\Models\User;
+use Livewire\Livewire;
 use Tests\TestCase;
 
 class MessageTest extends TestCase
@@ -44,5 +45,31 @@ class MessageTest extends TestCase
         $response = $this->actingAs($user)->get(route("message.view", [-1])); // -1 is an unexpected id (id is unsigned)
 
         $response->assertNotFound();
+    }
+
+    public function test_click_button_and_add_like()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $message = Message::factory()->create();
+
+        $livewire = Livewire::test(LikeButton::class, ['message' => $message]);
+        $livewire->call('onClick');
+        $livewire->assertSet('likeCount', 1);
+        $livewire->assertSet('icon', '❤️');
+    }
+
+    public function test_click_button_and_remove_like()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $message = Message::factory()->create();
+
+        $message->like($user);
+
+        $livewire = Livewire::test(LikeButton::class, ['message' => $message]);
+        $livewire->call('onClick');
+        $livewire->assertSet('likeCount', 0);
+        $livewire->assertSet('icon', '🖤');
     }
 }
