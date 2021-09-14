@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Http\Livewire\LikeButton;
 use App\Models\Message;
 use App\Models\User;
 use Tests\TestCase;
@@ -19,6 +20,7 @@ class MessageTest extends TestCase
         foreach ($messages as $message) {
             $response->assertSee($message->user->name);
             $response->assertSee($message->content);
+            $response->assertSeeLivewire(LikeButton::class);
         }
     }
 
@@ -32,6 +34,7 @@ class MessageTest extends TestCase
         $response->assertOk();
         $response->assertSee($message->user->name);
         $response->assertSee($message->content);
+        $response->assertSeeLivewire(LikeButton::class);
     }
 
     public function test_message_is_not_found()
