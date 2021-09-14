@@ -24,8 +24,8 @@ class LikeFactory extends Factory
     public function definition()
     {
         return [
-            'message_id' => Message::all()->random(),
-            'user_id' => User::all()->random(),
+            'message_id' => Message::factory(),
+            'user_id' => User::factory(),
         ];
     }
 }
