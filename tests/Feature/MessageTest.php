@@ -72,4 +72,16 @@ class MessageTest extends TestCase
         $livewire->assertSet('likeCount', 0);
         $livewire->assertSet('icon', '🖤');
     }
+
+    public function test_click_own_message_button_and_ignore_like()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $message = Message::factory(['user_id' => $user->id])->create();
+
+        $livewire = Livewire::test(LikeButton::class, ['message' => $message]);
+        $livewire->call('onClick');
+        $livewire->assertSet('likeCount', 0);
+        $livewire->assertSet('icon', '🖤');
+    }
 }
