@@ -2,25 +2,38 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Message;
+use Auth;
+use DB;
 use Livewire\Component;
 
 class LikeButton extends Component
 {
+    const Liked = "❤️";
+    const Unliked = "🖤";
+
     public $message;
-    public $likes;
+    public $likeCount;
     public $icon;
-    private $isLike; // いいねしているか TODO いいね機能実装時に削除
 
     public function render()
     {
-        $this->icon = $this->isLike? "❤️" : "🖤️";
-        $this->likes = $this->message->likes();
+        $like = $this->message->getLike(Auth::user());
+        $this->icon = ($like)? self::Liked : self::Unliked;
+        $this->likeCount = $this->message->likeCount();
         return view('livewire.like-button');
     }
 
     public function onClick()
     {
-        $this->isLike = !$this->isLike;
+        DB::transaction(function () {
+            $like = $this->message->getLike(Auth::user());
+            if ($like) {
+                $like->delete();
+            } else {
+                $this->message->like(Auth::user());
+            }
+        });
         $this->render();
     }
 }

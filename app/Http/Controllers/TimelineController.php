@@ -14,7 +14,7 @@ class TimelineController extends Controller
             'created_at',
             'user_id', // user
             'content',
-        ])->sortDesc();
+        ])->sortByDesc('created_at');
 
         return view('timeline', compact('messages'));
     }
