@@ -9,6 +9,9 @@ use Livewire\Component;
 
 class LikeButton extends Component
 {
+    const Liked = "❤️";
+    const Unliked = "🖤";
+
     public $message;
     public $likeCount;
     public $icon;
@@ -16,7 +19,7 @@ class LikeButton extends Component
     public function render()
     {
         $like = $this->message->getLike(Auth::user());
-        $this->icon = ($like)? "❤️" : "🖤";
+        $this->icon = ($like)? self::Liked : self::Unliked;
         $this->likeCount = $this->message->likeCount();
         return view('livewire.like-button');
     }

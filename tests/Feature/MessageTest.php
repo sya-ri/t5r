@@ -56,7 +56,7 @@ class MessageTest extends TestCase
         $livewire = Livewire::test(LikeButton::class, ['message' => $message]);
         $livewire->call('onClick');
         $livewire->assertSet('likeCount', 1);
-        $livewire->assertSet('icon', '❤️');
+        $livewire->assertSet('icon', LikeButton::Liked);
     }
 
     public function test_click_button_and_remove_like()
@@ -70,7 +70,7 @@ class MessageTest extends TestCase
         $livewire = Livewire::test(LikeButton::class, ['message' => $message]);
         $livewire->call('onClick');
         $livewire->assertSet('likeCount', 0);
-        $livewire->assertSet('icon', '🖤');
+        $livewire->assertSet('icon', LikeButton::Unliked);
     }
 
     public function test_click_own_message_button_and_ignore_like()
@@ -82,6 +82,6 @@ class MessageTest extends TestCase
         $livewire = Livewire::test(LikeButton::class, ['message' => $message]);
         $livewire->call('onClick');
         $livewire->assertSet('likeCount', 0);
-        $livewire->assertSet('icon', '🖤');
+        $livewire->assertSet('icon', LikeButton::Unliked);
     }
 }
