@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Message;
 use Auth;
+use DB;
 use Livewire\Component;
 
 class LikeButton extends Component
@@ -22,12 +23,14 @@ class LikeButton extends Component
 
     public function onClick()
     {
-        $like = $this->message->getLike(Auth::user());
-        if ($like) {
-            $like->delete();
-        } else {
-            $this->message->like(Auth::user());
-        }
+        DB::transaction(function () {
+            $like = $this->message->getLike(Auth::user());
+            if ($like) {
+                $like->delete();
+            } else {
+                $this->message->like(Auth::user());
+            }
+        });
         $this->render();
     }
 }
