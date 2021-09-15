@@ -73,6 +73,21 @@ class MessageTest extends TestCase
         $this->assertNull($message);
     }
 
+    public function test_too_long_message_is_not_created() {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $content = Str::random(CreateMessageForm::MaxLength + 1);
+
+        $livewire = Livewire::test(CreateMessageForm::class, ['content' => $content]);
+        $livewire->call('onSubmit');
+
+        $message = Message::all()
+            ->where('user_id', $user->id)
+            ->where('content', $content)
+            ->first();
+        $this->assertNull($message);
+    }
+
     public function test_message_screen_can_be_rendered()
     {
         $user = User::factory()->create();
