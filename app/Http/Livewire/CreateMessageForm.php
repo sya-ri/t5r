@@ -8,6 +8,13 @@ use Livewire\Component;
 
 class CreateMessageForm extends Component
 {
+    /**
+     * メッセージの最大長
+     *
+     * - [処理の流れ] フロントエンドから送信されたメッセージの先頭・末尾の空白を削除(trim)してデータベースに格納する
+     * - [フロントエンド] 処理の簡略化のために先頭・末尾の空白を考慮して文字列の長さを求める
+     * - [バックエンド] 先頭・末尾の空白を削除してから文字列の長さを求める
+     */
     const MaxLength = 255;
 
     public $content = '';
