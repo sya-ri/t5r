@@ -27,9 +27,13 @@ class CreateMessageForm extends Component
     public function onSubmit()
     {
         $this->content = trim($this->content);
-        if ($this->content && strlen($this->content) <= self::MaxLength) {
-            Message::create(['user_id' => Auth::user()->id, 'content' => $this->content]);
-            redirect(request()->header('Referer')); // reload page
+        if ($this->content) {
+            if (strlen($this->content) <= self::MaxLength) {
+                Message::create(['user_id' => Auth::user()->id, 'content' => $this->content]);
+                redirect(request()->header('Referer')); // reload page
+            } else {
+                $this->addError('content', '255文字以下のメッセージしか送信できません');
+            }
         }
     }
 }
