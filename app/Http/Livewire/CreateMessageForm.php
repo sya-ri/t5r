@@ -28,7 +28,7 @@ class CreateMessageForm extends Component
     {
         $this->content = trim($this->content);
         if ($this->content) {
-            if (strlen($this->content) <= self::MaxLength) {
+            if (mb_strlen($this->content) <= self::MaxLength) {
                 Message::create(['user_id' => Auth::user()->id, 'content' => $this->content]);
                 redirect(request()->header('Referer')); // reload page
             } else {
