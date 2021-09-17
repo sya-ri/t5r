@@ -6,6 +6,9 @@
     </x-slot>
 
     <div class="md:container md:mx-auto shadow-lg py-2">
+        <div class="m-2">
+            <livewire:create-message-form />
+        </div>
         @foreach($messages as $message)
             <div class="border-b border-gray-400 m-2">
                 <div class="flex justify-between text-lg border-b">

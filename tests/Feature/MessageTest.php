@@ -2,10 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Http\Livewire\CreateMessageForm;
 use App\Http\Livewire\LikeButton;
 use App\Models\Message;
 use App\Models\User;
 use Livewire\Livewire;
+use Str;
 use Tests\TestCase;
 
 class MessageTest extends TestCase
@@ -18,11 +20,147 @@ class MessageTest extends TestCase
         $response = $this->actingAs($user)->get(route('timeline'));
 
         $response->assertOk();
+        $response->assertSeeLivewire(CreateMessageForm::class);
         foreach ($messages as $message) {
             $response->assertSee($message->user->name);
             $response->assertSee($message->content);
             $response->assertSeeLivewire(LikeButton::class);
         }
+    }
+
+    public function test_message_can_be_created() {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $content = Str::random();
+
+        $livewire = Livewire::test(CreateMessageForm::class, ['content' => $content]);
+        $livewire->call('onSubmit');
+
+        $message = Message::all()
+            ->where('user_id', $user->id)
+            ->where('content', $content)
+            ->first();
+        $this->assertNotNull($message);
+    }
+
+    public function test_message_is_trimmed() {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $content = ' ' . Str::random() . ' ';
+
+        $livewire = Livewire::test(CreateMessageForm::class, ['content' => $content]);
+        $livewire->call('onSubmit');
+
+        $message = Message::all()
+            ->where('user_id', $user->id)
+            ->where('content', trim($content))
+            ->first();
+        $this->assertNotNull($message);
+    }
+
+    public function test_blank_message_is_not_created() {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $content = ' ';
+
+        $livewire = Livewire::test(CreateMessageForm::class, ['content' => $content]);
+        $livewire->call('onSubmit');
+
+        $message = Message::all()
+            ->where('user_id', $user->id)
+            ->where('content', $content)
+            ->first();
+        $this->assertNull($message);
+    }
+
+    public function test_max_length_alpha_message_can_be_created() {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $content = str_repeat('a', CreateMessageForm::MaxLength);
+
+        $livewire = Livewire::test(CreateMessageForm::class, ['content' => $content]);
+        $livewire->call('onSubmit');
+
+        $message = Message::all()
+            ->where('user_id', $user->id)
+            ->where('content', $content)
+            ->first();
+        $this->assertNotNull($message);
+    }
+
+    public function test_too_long_alpha_message_is_not_created() {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $content = str_repeat('a', CreateMessageForm::MaxLength + 1);
+
+        $livewire = Livewire::test(CreateMessageForm::class, ['content' => $content]);
+        $livewire->call('onSubmit');
+
+        $message = Message::all()
+            ->where('user_id', $user->id)
+            ->where('content', $content)
+            ->first();
+        $this->assertNull($message);
+    }
+
+    public function test_max_length_utf8_message_can_be_created() {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $content = str_repeat('あ', CreateMessageForm::MaxLength);
+
+        $livewire = Livewire::test(CreateMessageForm::class, ['content' => $content]);
+        $livewire->call('onSubmit');
+
+        $message = Message::all()
+            ->where('user_id', $user->id)
+            ->where('content', $content)
+            ->first();
+        $this->assertNotNull($message);
+    }
+
+    public function test_too_long_utf8_message_is_not_created() {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $content = str_repeat('あ', CreateMessageForm::MaxLength + 1);
+
+        $livewire = Livewire::test(CreateMessageForm::class, ['content' => $content]);
+        $livewire->call('onSubmit');
+
+        $message = Message::all()
+            ->where('user_id', $user->id)
+            ->where('content', $content)
+            ->first();
+        $this->assertNull($message);
+    }
+
+    public function test_max_length_utf8mb4_message_can_be_created() {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $content = str_repeat('😀', CreateMessageForm::MaxLength);
+
+        $livewire = Livewire::test(CreateMessageForm::class, ['content' => $content]);
+        $livewire->call('onSubmit');
+
+        $message = Message::all()
+            ->where('user_id', $user->id)
+            ->where('content', $content)
+            ->first();
+        $this->assertNotNull($message);
+    }
+
+    public function test_too_long_utf8mb4_message_is_not_created() {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $content = str_repeat('😀', CreateMessageForm::MaxLength + 1);
+
+        $livewire = Livewire::test(CreateMessageForm::class, ['content' => $content]);
+        $livewire->call('onSubmit');
+
+        $message = Message::all()
+            ->where('user_id', $user->id)
+            ->where('content', $content)
+            ->first();
+        $this->assertNull($message);
     }
 
     public function test_message_screen_can_be_rendered()
